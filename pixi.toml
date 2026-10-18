@@ -1,0 +1,50 @@
+[workspace]
+name = "scbench"
+version = "0.1.0"
+description = "CPU benchmark for single-cell RNA-seq analysis workloads (scanpy / Seurat x single sample / atlas)"
+channels = ["conda-forge", "bioconda"]
+platforms = ["linux-64", "osx-arm64"]
+
+# Shared by every environment: the orchestrator and the synthetic data generator.
+[dependencies]
+python = "3.12.*"
+numpy = ">=1.26"
+scipy = ">=1.11"
+h5py = ">=3.10"
+psutil = ">=5.9"
+
+[tasks]
+bench = "python -m scbench run"
+generate = "python -m scbench generate"
+report = "python -m scbench report"
+compare = "python -m scbench compare"
+smoke = "python -m scbench run --size tiny"
+install-all = "pixi install --all"
+
+[feature.scanpy.dependencies]
+scanpy = ">=1.10"
+anndata = ">=0.10"
+python-igraph = "*"
+leidenalg = "*"
+harmonypy = "*"
+scikit-misc = "*"
+scikit-image = "*"
+pynndescent = "*"
+umap-learn = "*"
+
+[feature.seurat.dependencies]
+r-base = "4.4.*"
+r-seurat = ">=5.0"
+r-seuratobject = ">=5.0"
+r-hdf5r = "*"
+r-harmony = ">=1.2"
+r-jsonlite = "*"
+r-matrix = "*"
+r-presto = "*"
+bioconductor-glmgampoi = "*"
+bioconductor-scdblfinder = "*"
+
+[environments]
+default = { solve-group = "default" }
+scanpy = { features = ["scanpy"], solve-group = "default" }
+seurat = { features = ["seurat"], solve-group = "default" }
